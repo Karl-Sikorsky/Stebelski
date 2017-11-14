@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "435030989720",
+    "firebase_url": "https://stebelski-b0cd4.firebaseio.com",
+    "project_id": "stebelski-b0cd4",
+    "storage_bucket": "stebelski-b0cd4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435030989720:android:268c100e2d698f62",
+        "android_client_info": {
+          "package_name": "com.example.stebelski"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "435030989720-miaect7hj6bi6c1kjdp6202jqqi1eijn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stebelski",
+            "certificate_hash": "225daccd27919bc5d9350e784e23202dd3f135f9"
+          }
+        },
+        {
+          "client_id": "435030989720-4hegtssrej5l3di9f85u14hincrsh2o5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-2kqhXQqRIPBkoVhGIR7_G05A6K95F9s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "435030989720-4hegtssrej5l3di9f85u14hincrsh2o5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

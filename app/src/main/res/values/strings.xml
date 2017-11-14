@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Stebelski</string>
+    <string name="facebook_app_id">545315959149633</string>
+    <string name="fb_login_protocol_scheme">fb545315959149633</string>
+</resources>
