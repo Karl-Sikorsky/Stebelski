@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,8 +56,14 @@ public class MainActivity extends AppCompatActivity implements CallBackListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main);
+
+
+
+
 
         Log.d(TAG, "facebook");
         mAuth = FirebaseAuth.getInstance();
@@ -67,6 +76,10 @@ public class MainActivity extends AppCompatActivity implements CallBackListener 
         needPreview = true;
 
         preview = (TextView)findViewById(R.id.preview);
+
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "fonts/Arimo-Regular.ttf");
+
+        preview.setTypeface(custom_font);
         preview.setText("Войдите в систему, чтобы начать");
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile", "user_friends");
@@ -74,12 +87,15 @@ public class MainActivity extends AppCompatActivity implements CallBackListener 
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+
+
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 showProgressBar();
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 getFriends();
                // FirebaseUser user = mAuth.getCurrentUser();
                // Toast.makeText(getApplicationContext(),"you are "+ user.getDisplayName().trim(),Toast.LENGTH_SHORT).show();
+
 
             }
 

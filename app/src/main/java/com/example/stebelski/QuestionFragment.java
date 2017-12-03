@@ -1,16 +1,22 @@
 package com.example.stebelski;
 
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -23,9 +29,12 @@ import java.util.List;
  */
 
 public class QuestionFragment  extends Fragment{
-    TextView questionView, progressView;
-    Button yes,no;
+    TextView questionView, qNumber, allNumber;
+    ImageView yes,no;
+    View currentView;
+    LinearLayout card;
     List<String> questions;
+    Handler handler;
     boolean[] answers;
     int counter;
 
@@ -40,10 +49,26 @@ public class QuestionFragment  extends Fragment{
         View v = inflater.inflate(R.layout.fragment_question, null);
         Log.d("questionFragment","onCreateView");
         questionView = (TextView)v.findViewById(R.id.textView);
-        progressView = (TextView)v.findViewById(R.id.textView2);
-        yes = (Button)v.findViewById(R.id.buttonYES);
-        no = (Button)v.findViewById(R.id.buttonNO);
+        //progressView = (TextView)v.findViewById(R.id.textView2);
+
+        handler = new Handler();
+
+        Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(),  "fonts/Arimo-Regular.ttf");
+        card = (LinearLayout)v.findViewById(R.id.cardLayout);
+        questionView.setTypeface(custom_font);
+        //progressView.setTypeface(custom_font);
+        yes = (ImageView) v.findViewById(R.id.buttonYES);
+        no = (ImageView) v.findViewById(R.id.buttonNO);
+        currentView = yes;
+        qNumber = (TextView)v.findViewById(R.id.question_number_tv);
+        allNumber = (TextView)v.findViewById(R.id.all_number_tv);
+        allNumber.setTypeface(custom_font);
+        qNumber.setTypeface(custom_font);
+
+
         counter = 0;
+        qNumber.setText(String.valueOf(counter));
+        allNumber.setText("из 64");
         callBackListener = (CallBackListener) getActivity();
         return v;
 
@@ -53,7 +78,8 @@ public class QuestionFragment  extends Fragment{
     public void onResume() {
         super.onResume();
 
-        progressView.setText("Текущий прогресс: "+ (counter+1)+ " /64");
+        //progressView.setText("Текущий прогресс: "+ (counter+1)+ " /64");
+        qNumber.setText(String.valueOf(counter+1));
     }
 
     @Override
@@ -154,7 +180,7 @@ public void onViewStateRestored(Bundle savedInstanceState) {
             @Override
             public void onClick(View view) {
                   answers[counter]=true;
-                updateQuestion();
+                updateQuestion(view);
                 Log.d("questionFragment","save yes ans");
             }
         });
@@ -162,18 +188,47 @@ public void onViewStateRestored(Bundle savedInstanceState) {
             @Override
             public void onClick(View view) {
                 answers[counter]=false;
-                updateQuestion();
+                updateQuestion(view);
                 Log.d("questionFragment","save no ans");
             }
         });
         questionView.setText(questions.get(counter));
+
     }
 
-    private void updateQuestion() {
+    private void updateQuestion( View view) {
         if(counter<63) {
             counter++;
-            questionView.setText(questions.get(counter));
-            progressView.setText("Текущий прогресс: "+ (counter+1)+ " /64");
+            currentView = view;
+            currentView.setPressed(true);
+            currentView.setEnabled(false);
+            currentView.setSelected(true);
+            YoYo.with(Techniques.FadeOutRight)
+                    .duration(700)
+                    .playOn(card);
+
+            YoYo.with(Techniques.FadeInLeft)
+                    .duration(10)
+                    .delay(700)
+                    .playOn(card);
+
+
+
+
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Do something after 5s = 5000ms
+                    questionView.setText(questions.get(counter));
+                    qNumber.setText(String.valueOf(counter+1));
+                    currentView.setPressed(false);
+                    currentView.setEnabled(true);
+                    currentView.setSelected(false);
+                }
+            }, 690);
+           // progressView.setText("Текущий прогресс: "+ (counter+1)+ " /64");
+
         }else{
             Toast.makeText(getActivity().getApplicationContext(),"DONE",Toast.LENGTH_SHORT).show();
             if(callBackListener != null)
